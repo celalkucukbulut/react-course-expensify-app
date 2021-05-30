@@ -89,11 +89,11 @@ test('add expense', () => {
 
 test('should add expense to database and store', (done) => {
   const store = createMockStore(defaultAuthState);
-  const expenseDefaultData = {
-    description : 'desc',
-    amount : 233,
-    note : 'note',
-    createdAt : 1000
+  const expenseData = {
+    description : '',
+    amount : 0,
+    note : '',
+    createdAt : 0
   };
   store.dispatch(startAddExpense({})).then(() => {
     const actions = store.getActions();
@@ -101,13 +101,13 @@ test('should add expense to database and store', (done) => {
       type : 'ADD_EXPENSE',
       expense : {
         id : expect.any(String),
-        ...expenseDefaultData
+        ...expenseData
       }
     });
 
     return database.ref(`users/${uid}/expenses/${actions[0].expense.id}`).once('value')
   }).then((snapshot) => {
-    expect(snapshot.val()).toEqual(expenseDefaultData);
+    expect(snapshot.val()).toEqual(expenseData);
     done();
   });
 });
